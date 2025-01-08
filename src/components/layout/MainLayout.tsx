@@ -1,23 +1,33 @@
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
-import { createElement } from "react";
+import { Layout, Menu, MenuProps } from "antd";
+import { NavLink, Outlet } from "react-router-dom";
+import { itemRoutes } from "../../routes/admin.routes";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  UserOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+const items: MenuProps["items"] = itemRoutes.reduce<MenuProps["items"]>(
+  (acc, item) => {
+    if (!acc) {
+      acc = [];
+    }
+    if (item.name && item.path) {
+      acc.push({
+        key: item.name,
+        label: <NavLink to={item.path}>{item.name}</NavLink>,
+      });
+    } else if (item.children) {
+      acc.push({
+        key: item.name,
+        label: item.name,
+        children: item.children.map((child) => ({
+          key: child.name,
+          label: <NavLink to={child.path}>{child.name}</NavLink>,
+        })),
+      });
+    }
+    return acc;
+  },
+  []
+);
 
 const MainLayout = () => {
   return (
@@ -32,11 +42,21 @@ const MainLayout = () => {
           console.log(collapsed, type);
         }}
       >
-        <div className="demo-logo-vertical" />
+        <div
+          style={{
+            color: "white",
+            height: "4rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h1>PH University</h1>
+        </div>
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["4"]}
+          defaultSelectedKeys={["home"]}
           items={items}
         />
       </Sider>
@@ -49,7 +69,7 @@ const MainLayout = () => {
               minHeight: 360,
             }}
           >
-            content
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
