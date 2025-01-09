@@ -20,6 +20,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"], // which files to compile
+  "exclude": ["node_modules"], // which files to exclude
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "outDir": "./dist"
 }
