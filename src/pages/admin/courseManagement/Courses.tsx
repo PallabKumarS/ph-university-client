@@ -1,13 +1,13 @@
-import { Button, Modal, Table } from 'antd';
+import { Button, Modal, Table } from "antd";
 import {
   useAddFacultiesMutation,
   useGetAllCoursesQuery,
-} from '../../../redux/features/admin/courseManagement';
-import { useState } from 'react';
-import PHForm from '../../../components/form/PHForm';
-import PHSelect from '../../../components/form/PHSelect';
-import { useGetAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
-import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
+} from "../../../redux/features/admin/courseManagement";
+import { useState } from "react";
+import PHForm from "../../../components/form/PHForm";
+import PHSelect from "../../../components/form/PHSelect";
+import { useGetAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
 
 const Courses = () => {
   // const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
@@ -22,20 +22,20 @@ const Courses = () => {
 
   const columns = [
     {
-      title: 'Title',
-      key: 'title',
-      dataIndex: 'title',
+      title: "Title",
+      key: "title",
+      dataIndex: "title",
     },
     {
-      title: 'Code',
-      key: 'code',
-      dataIndex: 'code',
+      title: "Code",
+      key: "code",
+      dataIndex: "code",
     },
     {
-      title: 'Action',
-      key: 'x',
+      title: "Action",
+      key: "x",
       render: (item) => {
-        return <AddFacultyModal facultyInfo={item} />;
+        return <AddTeacherModal teacherInfo={item} />;
       },
     },
   ];
@@ -62,7 +62,7 @@ const Courses = () => {
   );
 };
 
-const AddFacultyModal = ({ facultyInfo }) => {
+const AddTeacherModal = ({ teacherInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: facultiesData } = useGetAllFacultiesQuery(undefined);
   const [addFaculties] = useAddFacultiesMutation();
@@ -73,14 +73,14 @@ const AddFacultyModal = ({ facultyInfo }) => {
   }));
 
   const handleSubmit = (data) => {
-    const facultyData = {
-      courseId: facultyInfo.key,
+    const teacherData = {
+      courseId: teacherInfo.key,
       data,
     };
 
-    console.log(facultyData);
+    console.log(teacherData);
 
-    addFaculties(facultyData);
+    addFaculties(teacherData);
   };
 
   const showModal = () => {
@@ -93,7 +93,7 @@ const AddFacultyModal = ({ facultyInfo }) => {
 
   return (
     <>
-      <Button onClick={showModal}>Add Faculty</Button>
+      <Button onClick={showModal}>Add Teacher</Button>
       <Modal
         title="Basic Modal"
         open={isModalOpen}
@@ -105,7 +105,7 @@ const AddFacultyModal = ({ facultyInfo }) => {
             mode="multiple"
             options={facultiesOption}
             name="faculties"
-            label="Faculty"
+            label="Teacher"
           />
           <Button htmlType="submit">Submit</Button>
         </PHForm>

@@ -1,9 +1,9 @@
-const AcademicFaculty = () => {
+const AcademicTeacher = () => {
   return (
     <div>
-      <h1> This is AcademicFaculty component </h1>
+      <h1> This is AcademicTeacher component </h1>
     </div>
   );
 };
 
-export default AcademicFaculty;
+export default AcademicTeacher;

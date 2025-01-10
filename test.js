@@ -13,9 +13,9 @@
 //         element: "CreateStudent",
 //       },
 //       {
-//         name: "Create Faculty",
-//         path: "/admin/create-faculty",
-//         element: "CreateFaculty",
+//         name: "Create Teacher",
+//         path: "/admin/create-teacher",
+//         element: "CreateTeacher",
 //       },
 //       {
 //         name: "Create Admin",

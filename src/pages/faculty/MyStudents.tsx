@@ -1,24 +1,24 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import {
   useAddMarkMutation,
-  useGetAllFacultyCoursesQuery,
-} from '../../redux/features/faculty/facultyCourses.api';
-import { Button, Modal, Table, TableColumnsType } from 'antd';
-import { useState } from 'react';
-import PHForm from '../../components/form/PHForm';
-import PHSelect from '../../components/form/PHSelect';
-import PHInput from '../../components/form/PHInput';
+  useGetAllTeacherCoursesQuery,
+} from "../../redux/features/teacher/teacherCourses.api";
+import { Button, Modal, Table, TableColumnsType } from "antd";
+import { useState } from "react";
+import PHForm from "../../components/form/PHForm";
+import PHSelect from "../../components/form/PHSelect";
+import PHInput from "../../components/form/PHInput";
 
 const MyStudents = () => {
   const { registerSemesterId, courseId } = useParams();
-  const { data: facultyCoursesData } = useGetAllFacultyCoursesQuery([
-    { name: 'semesterRegistration', value: registerSemesterId },
-    { name: 'course', value: courseId },
+  const { data: teacherCoursesData } = useGetAllTeacherCoursesQuery([
+    { name: "semesterRegistration", value: registerSemesterId },
+    { name: "course", value: courseId },
   ]);
 
-  console.log(facultyCoursesData);
+  console.log(teacherCoursesData);
 
-  const tableData = facultyCoursesData?.data?.map(
+  const tableData = teacherCoursesData?.data?.map(
     ({ _id, student, semesterRegistration, offeredCourse }) => ({
       key: _id,
       name: student.fullName,
@@ -31,18 +31,18 @@ const MyStudents = () => {
 
   const columns = [
     {
-      title: 'Name',
-      key: 'name',
-      dataIndex: 'name',
+      title: "Name",
+      key: "name",
+      dataIndex: "name",
     },
     {
-      title: 'Roll',
-      key: 'roll',
-      dataIndex: 'roll',
+      title: "Roll",
+      key: "roll",
+      dataIndex: "roll",
     },
     {
-      title: 'Action',
-      key: 'x',
+      title: "Action",
+      key: "x",
       render: (item) => {
         return (
           <div>
@@ -90,7 +90,7 @@ const AddMarksModal = ({ studentInfo }) => {
 
   return (
     <>
-      <Button onClick={showModal}>Add Faculty</Button>
+      <Button onClick={showModal}>Add Teacher</Button>
       <Modal
         title="Basic Modal"
         open={isModalOpen}
