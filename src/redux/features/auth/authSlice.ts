@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { set } from "react-hook-form";
 
 const initialState = {
   user: null,
@@ -13,7 +14,10 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       const { user, token } = action.payload;
       state.user = user;
-      state.token = token;
+    },
+
+    setToken: (state, action) => {
+      state.token = action.payload;
     },
 
     // clear user info after logout
@@ -25,4 +29,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice;
-export const { setUser, logout } = authSlice.actions;
+export const { setUser, setToken, logout } = authSlice.actions;
