@@ -2,7 +2,9 @@ import sidebarRoutesGenerator from "../../utils/sidebarRoutesGenerator";
 import adminPaths from "../../routes/admin.routes";
 import studentPaths from "../../routes/student.routes";
 import { Layout, Menu } from "antd";
-import { TSidebarRoute } from "../../types";
+import { TSidebarRoute, TUser } from "../../types";
+import { useAppSelector } from "../../redux/hook";
+import { useCurrentUser } from "../../redux/features/auth/authSlice";
 
 const { Sider } = Layout;
 
@@ -15,9 +17,9 @@ const userRole = {
 const Sidebar = () => {
   let sidebarRoutes: TSidebarRoute[] | undefined;
 
-  const role = "admin";
+  const user = useAppSelector(useCurrentUser) as TUser | null;
 
-  switch (role) {
+  switch (user?.role || "student") {
     case userRole.ADMIN:
       sidebarRoutes = sidebarRoutesGenerator(adminPaths, userRole.ADMIN);
       break;
@@ -35,12 +37,12 @@ const Sidebar = () => {
     <Sider
       breakpoint="lg"
       collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
+      // onBreakpoint={(broken) => {
+
+      // }}
+      // onCollapse={(collapsed, type) => {
+
+      // }}
     >
       <div
         style={{
