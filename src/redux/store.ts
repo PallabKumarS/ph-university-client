@@ -12,6 +12,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
+import academicSemesterSlice from "./features/academicSemester/academicSemesterSlice";
 
 const persistConfig = {
   key: "auth",
@@ -24,6 +25,9 @@ export const store = configureStore({
   reducer: {
     // auth reducer
     auth: persistedAuthReducer,
+
+    // academic semester reducer
+    academicSemester: academicSemesterSlice.reducer,
 
     // baseApi reducer
     [baseApi.reducerPath]: baseApi.reducer,

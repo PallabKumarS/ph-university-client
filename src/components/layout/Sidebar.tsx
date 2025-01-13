@@ -32,7 +32,6 @@ const Sidebar = () => {
     default:
       sidebarRoutes = [];
   }
-
   return (
     <Sider
       breakpoint="lg"
@@ -58,7 +57,7 @@ const Sidebar = () => {
       <Menu
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["home"]}
+        defaultSelectedKeys={[``]}
         items={sidebarRoutes}
       />
     </Sider>
