@@ -2,9 +2,9 @@ import sidebarRoutesGenerator from "../../utils/sidebarRoutesGenerator";
 import adminPaths from "../../routes/admin.routes";
 import studentPaths from "../../routes/student.routes";
 import { Layout, Menu } from "antd";
-import { TSidebarRoute, TUser } from "../../types";
+import { TSidebarRoute } from "../../types";
 import { useAppSelector } from "../../redux/hook";
-import { useCurrentUser } from "../../redux/features/auth/authSlice";
+import { TUser, selectCurrentUser } from "../../redux/features/auth/authSlice";
 
 const { Sider } = Layout;
 
@@ -17,7 +17,7 @@ const userRole = {
 const Sidebar = () => {
   let sidebarRoutes: TSidebarRoute[] | undefined;
 
-  const user = useAppSelector(useCurrentUser) as TUser | null;
+  const user = useAppSelector(selectCurrentUser) as TUser | null;
 
   switch (user?.role || "student") {
     case userRole.ADMIN:
