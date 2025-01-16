@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { TSidebarRoute, TUserPaths } from "../types";
+import { TSidebarRoute, TUserPaths } from "../types/sidebar.type";
 
 export default function sidebarRoutesGenerator(
   items: TUserPaths[],

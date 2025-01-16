@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Form, Modal } from "antd";
+import { Button, Modal } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import { semesterOptions, yearOptions } from "../../../constants/semester";
 import CustomForm from "../../../components/form/CustomForm";
@@ -6,19 +6,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { academicSemesterSchema } from "../../../schema/academicManagement.schema";
 import CustomSelect from "../../../components/form/CustomSelect";
 import { monthsOptions } from "../../../constants/global";
+import {
+  useCreateSemesterMutation,
+  useUpdateSemesterMutation,
+} from "../../../redux/features/admin/academicManagement.api";
+import { toast } from "sonner";
+import { TResponse } from "../../../types/global.type";
+import { TSemester } from "../../../types/academicManagement.types";
 
 type TModalProps = {
-  setIsModalOpen: Function;
+  setIsModalOpen: (isOpen: boolean) => void;
   isModalOpen: boolean;
-  editData?: boolean;
+  editData?: FieldValues;
+  edit?: boolean;
 };
 
-const SemesterModal = ({ setIsModalOpen, isModalOpen }: TModalProps) => {
+const SemesterModal = ({
+  setIsModalOpen,
+  isModalOpen,
+  edit,
+  editData,
+}: TModalProps) => {
+  const [updateSemester] = useUpdateSemesterMutation();
+  const [createSemester] = useCreateSemesterMutation();
+
+  // cancel function
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  // submit function
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const toastId = toast.loading("Creating semester...");
     // convert code to name
     const name = semesterOptions[Number(data?.name) - 1]?.label;
 
@@ -30,22 +49,35 @@ const SemesterModal = ({ setIsModalOpen, isModalOpen }: TModalProps) => {
       endMonth: data.endMonth,
     };
 
-    console.log(semesterData);
-    setIsModalOpen(false);
+    try {
+      if (edit) {
+        updateSemester({ id: editData?._id, body: semesterData });
+      } else {
+        const res = (await createSemester(semesterData)) as TResponse<any>;
+
+        res?.data?.success
+          ? (setIsModalOpen(false),
+            toast.success(res?.data?.message, { id: toastId }))
+          : toast.error(res?.error?.data?.message || "An error occurred", {
+              id: toastId,
+            });
+      }
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId });
+    }
   };
 
   return (
     <Modal
-      title="Basic Modal"
+      title={edit ? "Edit Semester" : "Create Semester"}
       open={isModalOpen}
       onCancel={handleCancel}
       footer={null}
     >
-      {/* <Flex justify="center" align="center">
-          <Col span={6}> */}
       <CustomForm
         onSubmit={onSubmit}
         resolver={zodResolver(academicSemesterSchema)}
+        defaultValues={editData}
       >
         {/* name of semester  */}
         <CustomSelect label="Name" name="name" options={semesterOptions} />
@@ -68,11 +100,9 @@ const SemesterModal = ({ setIsModalOpen, isModalOpen }: TModalProps) => {
         />
 
         <Button type="primary" htmlType="submit">
-          Create Semester
+          {edit ? "Update Academic Semester" : "Create Academic Semester"}
         </Button>
       </CustomForm>
-      {/* </Col>
-        </Flex> */}
     </Modal>
   );
 };

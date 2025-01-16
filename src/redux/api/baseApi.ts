@@ -35,14 +35,22 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   const toastId = (api.getState() as RootState).auth.loginToastId;
 
   if (result?.error?.status === 404) {
-    toast.error("User not found", { id: toastId as string });
+    toast.error((result?.error?.data as { message: string })?.message, {
+      id: toastId as string,
+    });
   }
 
   if (result?.error?.status === 403) {
-    toast.error("Credentials are incorrect", { id: toastId as string });
+    toast.error((result?.error?.data as { message: string })?.message, {
+      id: toastId as string,
+    });
   }
 
-  if (result?.error && result?.error?.status === 401) {
+  if (
+    result?.error &&
+    // instanceof InvalidTokenError &&
+    result?.error?.status === 401
+  ) {
     // send refresh token
     const res = await fetch("http://localhost:5000/api/v1/auth/refresh-token", {
       method: "POST",
@@ -77,6 +85,7 @@ export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
+  tagTypes: ["semesters", "users", "departments", "faculties"],
 });
 
 export default baseApi;

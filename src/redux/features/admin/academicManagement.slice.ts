@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {};
 
-const academicSemesterSlice = createSlice({
+const academicManagementSlice = createSlice({
   name: "academicSemester",
   initialState,
   reducers: {},
 });
 
-export default academicSemesterSlice;
+export default academicManagementSlice;
