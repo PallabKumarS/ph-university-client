@@ -2,7 +2,11 @@ import { Button, Row } from "antd";
 import { FieldValues } from "react-hook-form";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hook";
-import { setUser, TUser } from "../redux/features/auth/authSlice";
+import {
+  setLoginToastId,
+  setUser,
+  TUser,
+} from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -24,11 +28,11 @@ const Login = () => {
   // login function
   const onSubmit = async (data: FieldValues) => {
     const toastId = toast.loading("Logging in...");
+    dispatch(setLoginToastId(toastId));
 
     // login user
     try {
       const res = await login(data).unwrap();
-      console.log(res);
 
       const user = verifyToken(res.data.accessToken) as TUser;
       dispatch(setUser({ user, token: res.data.accessToken }));
@@ -36,7 +40,7 @@ const Login = () => {
       navigate(`/${user.role}/dashboard`);
       toast.success("Login successful", { id: toastId });
     } catch (err) {
-      toast.error("Login failed");
+      // toast.error("Login failed",);
     }
   };
 

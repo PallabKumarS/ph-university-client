@@ -1,4 +1,4 @@
-const AcademicTeacher = () => {
+const AcademicFaculty = () => {
   return (
     <div>
       <h1> This is AcademicTeacher component </h1>
@@ -6,4 +6,4 @@ const AcademicTeacher = () => {
   );
 };
 
-export default AcademicTeacher;
+export default AcademicFaculty;

@@ -11,11 +11,13 @@ export type TUser = {
 type TAuthState = {
   user: TUser | null;
   token: string | null;
+  loginToastId: string | null;
 };
 
 const initialState: TAuthState = {
   user: null,
   token: null,
+  loginToastId: null,
 };
 
 const authSlice = createSlice({
@@ -34,10 +36,16 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
+
+    // set login toast id
+    setLoginToastId: (state, action) => {
+      state.loginToastId = action.payload;
+    },
   },
 });
 
 export default authSlice;
-export const { setUser, logout } = authSlice.actions;
+export const { setUser, logout, setLoginToastId } = authSlice.actions;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
 export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectLoginToastId = (state: RootState) => state.auth.loginToastId;

@@ -9,6 +9,7 @@ import {
 import { RootState } from "../store";
 import { verifyToken } from "../../utils/verifyToken";
 import { logout, setUser } from "../features/auth/authSlice";
+import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api/v1",
@@ -30,6 +31,16 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
+
+  const toastId = (api.getState() as RootState).auth.loginToastId;
+
+  if (result?.error?.status === 404) {
+    toast.error("User not found", { id: toastId as string });
+  }
+
+  if (result?.error?.status === 403) {
+    toast.error("Credentials are incorrect", { id: toastId as string });
+  }
 
   if (result?.error && result?.error?.status === 401) {
     // send refresh token
