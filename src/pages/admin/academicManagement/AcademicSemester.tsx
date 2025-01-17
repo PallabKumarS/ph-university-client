@@ -2,12 +2,16 @@ import { MouseEvent, useState } from "react";
 import { Button, Table, TableColumnsType, TableProps } from "antd";
 import SemesterModal from "./SemesterModal";
 import "./../../../index.css";
-import { useGetAllSemesterQuery } from "../../../redux/features/admin/academicManagement.api";
+import {
+  useDeleteSemesterMutation,
+  useGetAllSemesterQuery,
+} from "../../../redux/features/admin/academicManagement.api";
 import { TSemester } from "../../../types/academicManagement.types";
-import { TQueryParams } from "../../../types/global.type";
+import { TQueryParams, TResponse } from "../../../types/global.type";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { showDeleteConfirm } from "../../../components/ui/AlertBox";
+import { toast } from "sonner";
 
 // type declared here
 type TTableData = Pick<
@@ -29,8 +33,21 @@ const AcademicSemester = () => {
   });
 
   // delete data from api
-  const handleDelete = (id: string) => {
-    console.log(id);
+  const [deleteSemester] = useDeleteSemesterMutation();
+
+  const handleDelete = async (id: string) => {
+    const toastId = toast.loading("Deleting Semester...");
+
+    try {
+      const res = (await deleteSemester(id)) as TResponse<any>;
+      res?.data?.success
+        ? toast.success(res?.data?.message, { id: toastId })
+        : toast.error(res?.error?.data?.message || "An error occurred", {
+            id: toastId,
+          });
+    } catch (error) {
+      toast.error("An error occurred", { id: toastId });
+    }
   };
 
   // edit data
