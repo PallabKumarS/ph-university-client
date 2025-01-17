@@ -1,9 +1,5 @@
 import { TSemester } from "../../../types/academicManagement.types";
-import {
-  TQueryParams,
-  TResponse,
-  TResponseRedux,
-} from "../../../types/global.type";
+import { TQueryParams, TResponseRedux } from "../../../types/global.type";
 import baseApi from "../../api/baseApi";
 
 const academicManagementApi = baseApi.injectEndpoints({
@@ -58,6 +54,10 @@ const academicManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["semesters"],
+      // transformResponse: (response: TResponseRedux<Partial<TSemester>>) => {
+      //   console.log(response);
+      //   return response;
+      // },
     }),
 
     // delete semester api

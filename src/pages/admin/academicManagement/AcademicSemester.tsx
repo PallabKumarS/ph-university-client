@@ -1,34 +1,44 @@
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { Button, Table, TableColumnsType, TableProps } from "antd";
 import SemesterModal from "./SemesterModal";
 import "./../../../index.css";
 import { useGetAllSemesterQuery } from "../../../redux/features/admin/academicManagement.api";
 import { TSemester } from "../../../types/academicManagement.types";
 import { TQueryParams } from "../../../types/global.type";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { showDeleteConfirm } from "../../../components/ui/AlertBox";
 
 // type declared here
 type TTableData = Pick<
   TSemester,
-  "name" | "year" | "startMonth" | "endMonth"
+  "name" | "year" | "startMonth" | "endMonth" | "code"
 > & {
   key: string;
 };
 
 const AcademicSemester = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editRecord, setEditRecord] = useState<TTableData | null>(null);
   const [params, setParams] = useState<TQueryParams[]>([]);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const {
-    data: semesterData,
-    isLoading,
-    isFetching,
-  } = useGetAllSemesterQuery(params, {
+  // fetching data from api
+  const { data: semesterData, isFetching } = useGetAllSemesterQuery(params, {
     refetchOnReconnect: true,
   });
+
+  // delete data from api
+  const handleDelete = (id: string) => {
+    console.log(id);
+  };
+
+  // edit data
+  const handleEdit = (record: TTableData, event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setEditRecord(record);
+    setIsEditModalOpen(true);
+  };
 
   const tableData = semesterData?.data?.map((item) => ({
     key: item._id,
@@ -36,6 +46,7 @@ const AcademicSemester = () => {
     year: item.year,
     startMonth: item.startMonth,
     endMonth: item.endMonth,
+    code: item.code,
   }));
 
   const columns: TableColumnsType<TTableData> = [
@@ -85,14 +96,35 @@ const AcademicSemester = () => {
       dataIndex: "startMonth",
     },
 
-    // fifth column in table
+    // fifth column in table (action column)
     {
       title: "Action",
-      render: (_, record) => {
+      render: (record) => {
         return (
-          <div>
-            <Button type="primary" onClick={showModal}>
-              Edit
+          <div className="responsive-table-div">
+            {/* edit button  */}
+            <Button
+              type="primary"
+              onClick={(event) => handleEdit(record, event)}
+              className="responsive-table-items"
+            >
+              <FaEdit />
+            </Button>
+
+            {/* delete button  */}
+            <Button
+              type="primary"
+              className="responsive-table-items"
+              onClick={() =>
+                showDeleteConfirm(
+                  "Are you sure you want to delete this semester ?",
+                  `${record.name}  ${record.year} semester will be deleted`,
+                  () => handleDelete(record.key)
+                )
+              }
+              style={{ background: "red" }}
+            >
+              <MdDeleteForever />
             </Button>
           </div>
         );
@@ -117,10 +149,6 @@ const AcademicSemester = () => {
     }
   };
 
-  if (isLoading) {
-    return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
-  }
-
   return (
     <div>
       <div
@@ -133,21 +161,33 @@ const AcademicSemester = () => {
         <h1 className="responsive-flex-items" style={{ marginBottom: "1rem" }}>
           Academic Semesters
         </h1>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary" onClick={() => setIsModalOpen(true)}>
           Create Semester
         </Button>
       </div>
-      <SemesterModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      />
+      {isModalOpen && (
+        <SemesterModal
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
       <Table<TTableData>
         columns={columns}
         dataSource={tableData}
         onChange={onChange}
         loading={isFetching}
         showSorterTooltip={{ target: "sorter-icon" }}
+        style={{ overflow: "scroll" }}
       />
+      {/* edit modal here */}{" "}
+      {isEditModalOpen && editRecord && (
+        <SemesterModal
+          isModalOpen={isEditModalOpen}
+          setIsModalOpen={setIsEditModalOpen}
+          edit={true}
+          editData={editRecord}
+        />
+      )}
     </div>
   );
 };

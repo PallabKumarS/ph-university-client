@@ -18,3 +18,22 @@
     margin: 0;
   }
 }
+
+@media (min-width: 768px) {
+  .responsive-table-div {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .responsive-table-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+}
