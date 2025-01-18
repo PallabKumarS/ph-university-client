@@ -6,7 +6,7 @@ import {
 import { useState } from "react";
 import PHForm from "../../../components/form/PHForm";
 import PHSelect from "../../../components/form/PHSelect";
-import { useGetAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useGetAcademicFacultiesQuery } from "../../../redux/features/admin/academicManagement/academicSemester.api";
 import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
 
 const Courses = () => {

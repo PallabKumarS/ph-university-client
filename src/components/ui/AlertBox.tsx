@@ -1,4 +1,5 @@
 import { Modal } from "antd";
+import { MouseEventHandler } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 
 const { confirm } = Modal;
@@ -6,7 +7,7 @@ const { confirm } = Modal;
 export const showDeleteConfirm = (
   message?: string,
   description?: string,
-  onClick?: any
+  onClick?: MouseEventHandler<HTMLElement> | undefined
 ) => {
   confirm({
     title: message || "Do you want to delete these item ?",
@@ -26,7 +27,9 @@ export const showDeleteConfirm = (
     okType: "danger",
     cancelText: "No",
     onOk() {
-      onClick();
+      if (onClick) {
+        onClick({} as React.MouseEvent<HTMLElement>);
+      }
     },
   });
 };

@@ -1,8 +1,8 @@
-import { TSemester } from "../../../types/academicManagement.types";
-import { TQueryParams, TResponseRedux } from "../../../types/global.type";
-import baseApi from "../../api/baseApi";
+import { TSemester } from "../../../../types/academicManagement.types";
+import { TQueryParams, TResponseRedux } from "../../../../types/global.type";
+import baseApi from "../../../api/baseApi";
 
-const academicManagementApi = baseApi.injectEndpoints({
+const academicSemesterApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // create semester api
     createSemester: builder.mutation({
@@ -54,10 +54,9 @@ const academicManagementApi = baseApi.injectEndpoints({
         body: data,
       }),
       invalidatesTags: ["semesters"],
-      // transformResponse: (response: TResponseRedux<Partial<TSemester>>) => {
-      //   console.log(response);
-      //   return response;
-      // },
+      transformResponse: (response: TResponseRedux<Partial<TSemester>>) => {
+        return response;
+      },
     }),
 
     // delete semester api
@@ -77,4 +76,4 @@ export const {
   useDeleteSemesterMutation,
   useGetSingleSemesterQuery,
   useUpdateSemesterMutation,
-} = academicManagementApi;
+} = academicSemesterApi;

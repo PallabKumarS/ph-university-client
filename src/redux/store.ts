@@ -12,7 +12,7 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-import academicManagementSlice from "./features/admin/academicManagement.slice";
+import academicManagementSlice from "./features/admin/academicManagement/academicManagement.slice";
 
 const persistConfig = {
   key: "auth",
@@ -27,7 +27,7 @@ export const store = configureStore({
     auth: persistedAuthReducer,
 
     // academic semester reducer
-    academicSemester: academicManagementSlice.reducer,
+    academicManagement: academicManagementSlice.reducer,
 
     // baseApi reducer
     [baseApi.reducerPath]: baseApi.reducer,

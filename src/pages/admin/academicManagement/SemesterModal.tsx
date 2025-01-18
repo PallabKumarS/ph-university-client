@@ -9,14 +9,14 @@ import { monthsOptions } from "../../../constants/global";
 import {
   useCreateSemesterMutation,
   useUpdateSemesterMutation,
-} from "../../../redux/features/admin/academicManagement.api";
+} from "../../../redux/features/admin/academicManagement/academicSemester.api";
 import { toast } from "sonner";
 import { TResponse } from "../../../types/global.type";
 
 type TModalProps = {
-  setIsModalOpen: (isOpen: boolean) => void;
+  onClose: () => void;
   isModalOpen: boolean;
-  editData?: {
+  initialData?: {
     key: string;
     name: string;
     code: string;
@@ -24,49 +24,37 @@ type TModalProps = {
     startMonth: string;
     endMonth: string;
   };
-  edit?: boolean;
 };
 
-const SemesterModal = ({
-  setIsModalOpen,
-  isModalOpen,
-  edit,
-  editData,
-}: TModalProps) => {
+const SemesterModal = ({ onClose, isModalOpen, initialData }: TModalProps) => {
   const [updateSemester] = useUpdateSemesterMutation();
   const [createSemester] = useCreateSemesterMutation();
-
-  // cancel function
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   // submit function
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading(
-      edit ? "Updating Semester..." : "Creating Semester..."
+      initialData ? "Updating Semester..." : "Creating Semester..."
     );
     // convert code to name
     const name = semesterOptions[Number(data?.name) - 1]?.label;
 
     const semesterData = {
-      name: name ? name : editData?.name,
-      code: name ? data.name : editData?.code,
+      name: name ? name : initialData?.name,
+      code: name ? data.name : initialData?.code,
       year: String(data.year),
       startMonth: data.startMonth,
       endMonth: data.endMonth,
     };
 
     try {
-      if (edit) {
+      if (initialData) {
         const res = (await updateSemester({
-          id: editData?.key,
+          id: initialData?.key,
           data: semesterData,
         })) as TResponse<any>;
 
         res?.data?.success
-          ? (setIsModalOpen(false),
-            toast.success(res?.data?.message, { id: toastId }))
+          ? (onClose(), toast.success(res?.data?.message, { id: toastId }))
           : toast.error(res?.error?.data?.message || "An error occurred", {
               id: toastId,
             });
@@ -74,8 +62,7 @@ const SemesterModal = ({
         const res = (await createSemester(semesterData)) as TResponse<any>;
 
         res?.data?.success
-          ? (setIsModalOpen(false),
-            toast.success(res?.data?.message, { id: toastId }))
+          ? (onClose(), toast.success(res?.data?.message, { id: toastId }))
           : toast.error(res?.error?.data?.message || "An error occurred", {
               id: toastId,
             });
@@ -87,49 +74,65 @@ const SemesterModal = ({
 
   return (
     <Modal
-      key={edit ? editData?.key : "add"}
-      centered
-      title={edit ? "Edit Semester" : "Create Semester"}
+      key={initialData ? initialData?.key : "add"}
+      title={
+        <h2 style={{ textAlign: "center" }}>
+          {initialData ? "Edit Semester" : "Create Semester"}
+        </h2>
+      }
       open={isModalOpen}
-      onCancel={handleCancel}
+      onCancel={onClose}
       footer={null}
       width={{
-        xs: "90%",
-        sm: "80%",
-        md: "70%",
-        lg: "60%",
-        xl: "50%",
-        xxl: "40%",
+        xs: "80%",
+        sm: "70%",
+        md: "60%",
+        lg: "50%",
+        xl: "40%",
+        xxl: "30%",
       }}
+      centered
+      style={{ overflow: "scroll" }}
     >
       <CustomForm
         onSubmit={onSubmit}
         resolver={zodResolver(academicSemesterSchema)}
-        defaultValues={editData}
+        defaultValues={initialData}
       >
         {/* name of semester  */}
-        <CustomSelect label="Name" name="name" options={semesterOptions} />
+        <CustomSelect
+          label="Select Name"
+          name="name"
+          options={semesterOptions}
+        />
 
         {/* year */}
-        <CustomSelect label="Year" name="year" options={yearOptions} />
+        <CustomSelect label="Select Year" name="year" options={yearOptions} />
 
         {/* start month */}
         <CustomSelect
-          label="Start Month"
+          label="Select Start Month"
           name="startMonth"
           options={monthsOptions}
         />
 
         {/* end month */}
         <CustomSelect
-          label="End Month"
+          label="Select End Month"
           name="endMonth"
           options={monthsOptions}
         />
 
-        <Button type="primary" htmlType="submit">
-          {edit ? "Update Academic Semester" : "Create Academic Semester"}
-        </Button>
+        <div className="responsive-button-group">
+          <Button type="primary" htmlType="submit">
+            {initialData
+              ? "Update Academic Semester"
+              : "Create Academic Semester"}
+          </Button>
+          <Button onClick={onClose} danger>
+            Cancel
+          </Button>
+        </div>
       </CustomForm>
     </Modal>
   );

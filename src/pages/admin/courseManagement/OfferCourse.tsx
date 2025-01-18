@@ -17,7 +17,7 @@ import {
 import {
   useGetAcademicDepartmentsQuery,
   useGetAcademicFacultiesQuery,
-} from "../../../redux/features/admin/academicManagement.api";
+} from "../../../redux/features/admin/academicManagement/academicSemester.api";
 import { weekDaysOptions } from "../../../constants/global";
 import PHTimePicker from "../../../components/form/PHTimePicker";
 

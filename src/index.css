@@ -22,7 +22,7 @@
 @media (min-width: 768px) {
   .responsive-table-div {
     display: flex;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     gap: 2rem;
   }
@@ -36,4 +36,22 @@
     align-items: center;
     gap: 2rem;
   }
+}
+
+@media (min-width: 768px) {
+  .responsive-button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+.responsive-button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
