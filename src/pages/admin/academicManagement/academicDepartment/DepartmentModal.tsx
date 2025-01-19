@@ -5,14 +5,14 @@ import { toast } from "sonner";
 import {
   useCreateDepartmentMutation,
   useUpdateDepartmentMutation,
-} from "../../../redux/features/admin/academicManagement/academicDepartment.api";
-import { TResponse } from "../../../types/global.type";
-import CustomInput from "../../../components/form/CustomInput";
-import CustomForm from "../../../components/form/CustomForm";
+} from "../../../../redux/features/admin/academicManagement/academicDepartment.api";
+import { TResponse } from "../../../../types/global.type";
+import CustomInput from "../../../../components/form/CustomInput";
+import CustomForm from "../../../../components/form/CustomForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { academicDepartmentSchema } from "../../../schema/academicManagement.schema";
-import { TFaculty } from "../../../types/academicManagement.types";
-import CustomSelect from "../../../components/form/CustomSelect";
+import { academicDepartmentSchema } from "../../../../schema/academicManagement.schema";
+import { TFaculty } from "../../../../types/academicManagement.types";
+import CustomSelect from "../../../../components/form/CustomSelect";
 import { TTableDepartmentData } from "./AcademicDepartment";
 
 type DepartmentFormProps = {

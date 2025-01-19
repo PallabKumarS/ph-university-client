@@ -1,32 +1,46 @@
 import { useState } from "react";
-import { TFaculty } from "../../../types/academicManagement.types";
+import { TDepartment } from "../../../../types/academicManagement.types";
 import { Button } from "antd";
-import FacultyModal from "./FacultyModal";
-import {
-  useDeleteFacultyMutation,
-  useGetAllFacultyQuery,
-} from "../../../redux/features/admin/academicManagement/academicFaculty.api";
-import FacultyTable from "./FacultyTable";
 import { toast } from "sonner";
-import { TResponse } from "../../../types/global.type";
+import { TResponse } from "../../../../types/global.type";
+import {
+  useDeleteDepartmentMutation,
+  useGetAllDepartmentQuery,
+} from "../../../../redux/features/admin/academicManagement/academicDepartment.api";
+import { useGetAllFacultyQuery } from "../../../../redux/features/admin/academicManagement/academicFaculty.api";
+import "./../../../../index.css";
+import DepartmentTable from "./DepartmentTable";
+import DepartmentModal from "./DepartmentModal";
 
-export type TTableFacultyData = Pick<TFaculty, "name"> & {
+export type TTableDepartmentData = Pick<
+  TDepartment,
+  "name" | "academicFaculty"
+> & {
   key: string;
+  facultyId: string;
+  facultyName: string;
 };
 
-const AcademicFaculty = () => {
-  const [editData, setEditData] = useState<TTableFacultyData | null>(null);
+const AcademicDepartment = () => {
+  const [editData, setEditData] = useState<TTableDepartmentData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // api related hooks
-  const { data: facultyData, isFetching } = useGetAllFacultyQuery(undefined, {
-    refetchOnReconnect: true,
-  });
-  const [deleteFaculty] = useDeleteFacultyMutation();
+  const { data: departmentData, isFetching } = useGetAllDepartmentQuery(
+    undefined,
+    {
+      refetchOnReconnect: true,
+    }
+  );
+  const { data: facultyData, isFetching: isFacultyFetching } =
+    useGetAllFacultyQuery(undefined, {
+      refetchOnReconnect: true,
+    });
+  const [deleteFaculty] = useDeleteDepartmentMutation();
 
   // handle edit function for edit button
-  const handleEdit = (record: TTableFacultyData) => {
+  const handleEdit = (record: TTableDepartmentData) => {
     setEditData(record);
     setIsEditModalOpen(true);
   };
@@ -53,42 +67,47 @@ const AcademicFaculty = () => {
         style={{ textAlign: "center", marginBottom: "3rem" }}
       >
         <h1 className="responsive-flex-items" style={{ marginBottom: "1rem" }}>
-          Academic Faculties
+          Academic Departments
         </h1>
         <Button type="primary" onClick={() => setIsModalOpen(true)}>
-          Create Faculty
+          Create Department
         </Button>
 
         {/* create modal here  */}
         {isModalOpen && (
-          <FacultyModal
+          <DepartmentModal
             isModalOpen={isModalOpen}
             onClose={() => {
               setIsModalOpen(false);
             }}
+            facultyData={facultyData}
           />
         )}
       </div>
+
       {/* table here  */}
-      <FacultyTable
-        data={facultyData}
+      <DepartmentTable
+        data={departmentData}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         isFetching={isFetching}
+        isFacultyFetching={isFacultyFetching}
       />
+
       {/* edit modal here */}
       {isEditModalOpen && editData && (
-        <FacultyModal
+        <DepartmentModal
           isModalOpen={isEditModalOpen}
           onClose={() => {
             setIsEditModalOpen(false);
             setEditData(null);
           }}
           initialData={editData}
+          facultyData={facultyData}
         />
       )}
     </div>
   );
 };
 
-export default AcademicFaculty;
+export default AcademicDepartment;

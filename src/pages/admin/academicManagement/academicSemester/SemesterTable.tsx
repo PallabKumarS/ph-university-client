@@ -1,9 +1,9 @@
 import { Button, Table, TableColumnsType, TableProps } from "antd";
-import { TSemester } from "../../../types/academicManagement.types";
+import { TSemester } from "../../../../types/academicManagement.types";
 import { FaEdit } from "react-icons/fa";
-import { showDeleteConfirm } from "../../../components/ui/AlertBox";
+import { showDeleteConfirm } from "../../../../components/ui/AlertBox";
 import { MdDeleteForever } from "react-icons/md";
-import { TMeta, TQueryParams } from "../../../types/global.type";
+import { TMeta, TQueryParams } from "../../../../types/global.type";
 import { Dispatch, SetStateAction } from "react";
 import { TTableSemesterData } from "./AcademicSemester";
 

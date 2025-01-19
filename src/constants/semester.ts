@@ -5,8 +5,8 @@ export const semesterOptions = [
 ];
 
 const currentYear = new Date().getFullYear();
+
 export const yearOptions = [0, 1, 2, 3, 4].map((number) => ({
   label: String(currentYear + number),
   value: String(currentYear + number),
 }));
-

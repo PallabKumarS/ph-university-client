@@ -5,12 +5,12 @@ import { toast } from "sonner";
 import {
   useCreateFacultyMutation,
   useUpdateFacultyMutation,
-} from "../../../redux/features/admin/academicManagement/academicFaculty.api";
-import { TResponse } from "../../../types/global.type";
-import CustomInput from "../../../components/form/CustomInput";
-import CustomForm from "../../../components/form/CustomForm";
+} from "../../../../redux/features/admin/academicManagement/academicFaculty.api";
+import { TResponse } from "../../../../types/global.type";
+import CustomInput from "../../../../components/form/CustomInput";
+import CustomForm from "../../../../components/form/CustomForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { academicFacultySchema } from "../../../schema/academicManagement.schema";
+import { academicFacultySchema } from "../../../../schema/academicManagement.schema";
 
 interface FacultyFormProps {
   isModalOpen: boolean;

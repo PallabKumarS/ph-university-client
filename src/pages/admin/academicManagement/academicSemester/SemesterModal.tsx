@@ -1,17 +1,17 @@
 import { Button, Modal } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
-import { semesterOptions, yearOptions } from "../../../constants/semester";
-import CustomForm from "../../../components/form/CustomForm";
+import { semesterOptions, yearOptions } from "../../../../constants/semester";
+import CustomForm from "../../../../components/form/CustomForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { academicSemesterSchema } from "../../../schema/academicManagement.schema";
-import CustomSelect from "../../../components/form/CustomSelect";
-import { monthsOptions } from "../../../constants/global";
+import { academicSemesterSchema } from "../../../../schema/academicManagement.schema";
+import CustomSelect from "../../../../components/form/CustomSelect";
+import { monthsOptions } from "../../../../constants/global";
 import {
   useCreateSemesterMutation,
   useUpdateSemesterMutation,
-} from "../../../redux/features/admin/academicManagement/academicSemester.api";
+} from "../../../../redux/features/admin/academicManagement/academicSemester.api";
 import { toast } from "sonner";
-import { TResponse } from "../../../types/global.type";
+import { TResponse } from "../../../../types/global.type";
 
 type TModalProps = {
   onClose: () => void;

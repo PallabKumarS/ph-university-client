@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Button } from "antd";
 import SemesterModal from "./SemesterModal";
-import "./../../../index.css";
+import "./../../../../index.css";
 import {
   useDeleteSemesterMutation,
   useGetAllSemesterQuery,
-} from "../../../redux/features/admin/academicManagement/academicSemester.api";
-import { TSemester } from "../../../types/academicManagement.types";
-import { TQueryParams, TResponse } from "../../../types/global.type";
+} from "../../../../redux/features/admin/academicManagement/academicSemester.api";
+import { TSemester } from "../../../../types/academicManagement.types";
+import { TQueryParams, TResponse } from "../../../../types/global.type";
 import { toast } from "sonner";
 import SemesterTable from "./SemesterTable";
 

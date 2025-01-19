@@ -2,9 +2,8 @@ import { Button, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import "./../../../index.css";
-import { TFaculty } from "../../../types/academicManagement.types";
-import { showDeleteConfirm } from "../../../components/ui/AlertBox";
+import { TFaculty } from "../../../../types/academicManagement.types";
+import { showDeleteConfirm } from "../../../../components/ui/AlertBox";
 import { TTableFacultyData } from "./AcademicFaculty";
 
 // type declaration here
