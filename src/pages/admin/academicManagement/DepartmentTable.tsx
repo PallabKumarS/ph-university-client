@@ -106,6 +106,7 @@ const DepartmentTable = ({
       dataSource={tableData}
       loading={isFetching || isFacultyFetching}
       rowKey="key"
+      style={{ overflow: "auto" }}
     />
   );
 };

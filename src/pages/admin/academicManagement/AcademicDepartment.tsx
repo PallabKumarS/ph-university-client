@@ -21,6 +21,11 @@ export type TTableDepartmentData = Pick<
   facultyName: string;
 };
 
+// export type TTableDepartmentData = Pick<
+//   TDepartment,
+//   "name" | "academicFaculty" | "_id"
+// >;
+
 const AcademicDepartment = () => {
   const [editData, setEditData] = useState<TTableDepartmentData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -143,7 +143,7 @@ const SemesterTable = ({
       onChange={onChange}
       loading={isFetching}
       showSorterTooltip={{ target: "sorter-icon" }}
-      style={{ overflow: "scroll" }}
+      style={{ overflow: "auto" }}
     />
   );
 };

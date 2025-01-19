@@ -83,7 +83,6 @@ const FacultyModal = ({
         xxl: "30%",
       }}
       centered
-      style={{ overflow: "auto" }}
     >
       <CustomForm
         onSubmit={onSubmit}

@@ -84,6 +84,7 @@ const FacultyTable = ({
       dataSource={tableData}
       loading={isFetching}
       rowKey="key"
+      style={{ overflow: "auto" }}
     />
   );
 };
