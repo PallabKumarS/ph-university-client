@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { academicDepartmentSchema } from "../../../schema/academicManagement.schema";
 import { TFaculty } from "../../../types/academicManagement.types";
 import CustomSelect from "../../../components/form/CustomSelect";
-import { useEffect, useState } from "react";
 import { TTableDepartmentData } from "./AcademicDepartment";
 
 type DepartmentFormProps = {
@@ -31,7 +30,6 @@ const DepartmentModal = ({
   initialData,
   facultyData,
 }: DepartmentFormProps) => {
-  const [dataWithFaculty, setDataWithFaculty] = useState<FieldValues>({});
   const [createDepartment] = useCreateDepartmentMutation();
   const [updateDepartment] = useUpdateDepartmentMutation();
 
@@ -40,17 +38,6 @@ const DepartmentModal = ({
     label: faculty.name || "",
     value: faculty._id || "",
   }));
-
-  useEffect(() => {
-    if (initialData) {
-      setDataWithFaculty({
-        name: initialData?.name || "",
-        academicFaculty: initialData?.academicFaculty?._id || "",
-      });
-    }
-  }, [initialData]);
-
-  console.log(dataWithFaculty);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const toastId = toast.loading(
@@ -61,7 +48,7 @@ const DepartmentModal = ({
       if (initialData) {
         const res = (await updateDepartment({
           id: initialData.key,
-          data,
+          data: { name: data.name, academicFaculty: data.facultyName },
         })) as TResponse<any>;
         if (res.data?.success) {
           onClose();
@@ -72,16 +59,18 @@ const DepartmentModal = ({
           });
         }
       } else {
-        // const res = (await createDepartment(data)) as TResponse<any>;
-        // if (res.data?.success) {
-        //   onClose();
-        //   toast.success(res.data.message, { id: toastId });
-        // } else {
-        //   toast.error(res.error?.data?.message || "An error occurred", {
-        //     id: toastId,
-        //   });
-        // }
-        console.log(data);
+        const res = (await createDepartment({
+          name: data.name,
+          academicFaculty: data.facultyName,
+        })) as TResponse<any>;
+        if (res.data?.success) {
+          onClose();
+          toast.success(res.data.message, { id: toastId });
+        } else {
+          toast.error(res.error?.data?.message || "An error occurred", {
+            id: toastId,
+          });
+        }
       }
     } catch (error) {
       toast.error("Something went wrong", { id: toastId });
@@ -107,17 +96,20 @@ const DepartmentModal = ({
         xxl: "30%",
       }}
       centered
-      style={{ overflow: "scroll" }}
+      style={{ overflow: "auto" }}
     >
       <CustomForm
         onSubmit={onSubmit}
-        defaultValues={initialData && dataWithFaculty}
+        defaultValues={{
+          name: initialData?.name,
+          facultyName: initialData?.facultyId,
+        }}
         resolver={zodResolver(academicDepartmentSchema)}
       >
         <CustomInput name="name" label="Academic Department Name" type="text" />
 
         <CustomSelect
-          name="academicFaculty"
+          name="facultyName"
           label="Select Academic Faculty"
           options={facultyOptions || []}
         />

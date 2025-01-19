@@ -10,12 +10,15 @@ import {
 } from "../../../redux/features/admin/academicManagement/academicDepartment.api";
 import { useGetAllFacultyQuery } from "../../../redux/features/admin/academicManagement/academicFaculty.api";
 import DepartmentModal from "./DepartmentModal";
+import "./../../../index.css";
 
 export type TTableDepartmentData = Pick<
   TDepartment,
   "name" | "academicFaculty"
 > & {
   key: string;
+  facultyId: string;
+  facultyName: string;
 };
 
 const AcademicDepartment = () => {
@@ -88,6 +91,7 @@ const AcademicDepartment = () => {
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         isFetching={isFetching}
+        isFacultyFetching={isFacultyFetching}
       />
 
       {/* edit modal here */}

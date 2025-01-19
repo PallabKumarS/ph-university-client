@@ -2,9 +2,9 @@ import sidebarRoutesGenerator from "../../utils/sidebarRoutesGenerator";
 import adminPaths from "../../routes/admin.routes";
 import studentPaths from "../../routes/student.routes";
 import { Layout, Menu } from "antd";
-import { TSidebarRoute } from "../../types";
 import { useAppSelector } from "../../redux/hook";
 import { TUser, selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { TSidebarRoute } from "../../types/sidebar.type";
 
 const { Sider } = Layout;
 
