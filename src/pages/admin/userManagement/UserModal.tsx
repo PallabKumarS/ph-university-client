@@ -1,16 +1,26 @@
 import { Modal } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import "./../../../index.css";
-import { TDepartment } from "../../../types/academicManagement.types";
+import {
+  TDepartment,
+  TSemester,
+} from "../../../types/academicManagement.types";
 import UserForm from "./UserForm";
+import { TUserType } from "../../../types/userManagement.type";
+import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement/studentManagement.api";
+import { toast } from "sonner";
+import { TResponse } from "../../../types/global.type";
 
 type TModalProps = {
   isModalOpen: boolean;
   onClose: () => void;
   initialData?: FieldValues;
-  userType: "student" | "faculty" | "admin";
+  userType: TUserType;
   departmentData?: {
     data?: TDepartment[];
+  };
+  semesterData?: {
+    data?: TSemester[];
   };
 };
 
@@ -20,14 +30,57 @@ const UserModal = ({
   userType,
   isModalOpen,
   departmentData,
+  semesterData,
 }: TModalProps) => {
+  // api hooks
+  const [createStudent] = useCreateStudentMutation();
+
+  // convert to options for select field
   const departmentOptions = departmentData?.data?.map((department) => ({
     label: department.name || "",
     value: department._id || "",
   }));
+  const semesterOptions = semesterData?.data?.map((semester) => ({
+    label: `${semester.name} ${semester.year}` || "",
+    value: semester._id || "",
+  }));
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
+    const toastId = toast.loading(`Creating ${userType}...`);
+
+    const formData = new FormData();
+
+    const { profileImage, ...restData } = data;
+
+    const userData = {
+      password: "123456",
+      studentData: restData,
+    };
+
+
+    const studentData = JSON.stringify(userData);
+    formData.append("data", studentData);
+
+    if (data.profileImage) {
+      formData.append("file", profileImage.fileList[0].originFileObj);
+    }
+
+    try {
+      const res = (await createStudent(formData)) as TResponse<any>;
+
+      console.log(res);
+
+      if (res.data?.success) {
+        onClose();
+        toast.success(res.data.message, { id: toastId });
+      } else {
+        toast.error(res.error?.data?.message || "An error occurred", {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred", { id: toastId });
+    }
   };
 
   return (
@@ -57,6 +110,7 @@ const UserModal = ({
         userType={userType}
         departmentOptions={departmentOptions}
         onCancel={onClose}
+        semesterOptions={semesterOptions}
       ></UserForm>
     </Modal>
   );

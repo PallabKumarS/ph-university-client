@@ -17,7 +17,7 @@ type TUserPaths = {
 export const routesGenerator = (items: TUserPaths[]) => {
   const routes: TRoute[] = items.reduce((acc: TRoute[], item) => {
     if (item.path && item.element) {
-      if (item.name.toLowerCase() === item.path) {
+      if (item?.name && (item?.name as string).toLowerCase() === item.path) {
         acc.push({
           index: true,
           element: item.element,
@@ -30,7 +30,10 @@ export const routesGenerator = (items: TUserPaths[]) => {
     }
     if (item.children) {
       item.children.forEach((child) => {
-        if (child.name.toLowerCase() === child.path!) {
+        if (
+          child?.name &&
+          (child?.name as string).toLowerCase() === child.path!
+        ) {
           acc.push({
             index: true,
             element: child.element,

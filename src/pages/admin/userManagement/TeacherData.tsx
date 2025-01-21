@@ -1,4 +1,4 @@
-const CreateTeacher = () => {
+const TeacherData = () => {
   return (
     <div>
       <h1> This is CreateTeacher component </h1>
@@ -6,4 +6,4 @@ const CreateTeacher = () => {
   );
 };
 
-export default CreateTeacher;
+export default TeacherData;

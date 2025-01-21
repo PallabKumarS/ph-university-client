@@ -6,9 +6,16 @@ type TSelectProps = {
   name: string;
   options: { label: string; value: string; disabled?: boolean }[];
   extra?: { labelCol?: { span: number }; wrapperCol?: { span: number } };
+  disabled?: boolean;
 };
 
-const CustomSelect = ({ label, name, options, extra }: TSelectProps) => {
+const CustomSelect = ({
+  label,
+  name,
+  options,
+  extra,
+  disabled,
+}: TSelectProps) => {
   return (
     <Controller
       name={name}
@@ -19,10 +26,12 @@ const CustomSelect = ({ label, name, options, extra }: TSelectProps) => {
           {...extra}
         >
           <Select
+            variant="filled"
             style={{ width: "100%" }}
             {...field}
             options={options}
             size="large"
+            disabled={disabled}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>

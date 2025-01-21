@@ -12,7 +12,6 @@ type TTableProps = {
   data?: {
     data?: TDepartment[];
   };
-
   handleEdit: (record: TTableDepartmentData) => void;
   handleDelete: (id: string) => void;
   isFetching: boolean;

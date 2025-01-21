@@ -63,3 +63,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.custom-dragger-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  height: 100%;
+}
+
+.custom-dragger-label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  height: 100%;
+}

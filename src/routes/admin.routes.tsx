@@ -2,9 +2,10 @@ import AcademicDepartment from "../pages/admin/academicManagement/academicDepart
 import AcademicFaculty from "../pages/admin/academicManagement/academicFaculty/AcademicFaculty";
 import AcademicSemester from "../pages/admin/academicManagement/academicSemester/AcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import CreateAdmin from "../pages/admin/userManagement/CreateAdmin";
-import CreateTeacher from "../pages/admin/userManagement/CreateFaculty";
-import CreateStudent from "../pages/admin/userManagement/CreateStudent";
+import AdminData from "../pages/admin/userManagement/AdminData";
+import StudentData from "../pages/admin/userManagement/StudentData";
+import StudentDetails from "../pages/admin/userManagement/StudentDetails";
+import TeacherData from "../pages/admin/userManagement/TeacherData";
 import { TUserPaths } from "../types/sidebar.type";
 
 // main routes here
@@ -20,19 +21,24 @@ export const adminPaths: TUserPaths[] = [
     name: "User Management",
     children: [
       {
-        name: "Create Student",
-        path: "create-student",
-        element: <CreateStudent />,
+        name: "Student Management",
+        path: "students",
+        element: <StudentData />,
       },
       {
-        name: "Create Teacher",
-        path: "create-teacher",
-        element: <CreateTeacher />,
+        name: "Student Details",
+        path: "students/:studentId",
+        element: <StudentDetails />,
       },
       {
-        name: "Create Admin",
-        path: "create-admin",
-        element: <CreateAdmin />,
+        name: "Teacher Management",
+        path: "teachers",
+        element: <TeacherData />,
+      },
+      {
+        name: "Admin Management",
+        path: "admins",
+        element: <AdminData />,
       },
     ],
   },

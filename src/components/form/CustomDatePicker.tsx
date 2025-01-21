@@ -1,15 +1,19 @@
-import { Form, Input } from "antd";
-import { Controller } from "react-hook-form";
+import { DatePicker, Form } from "antd";
+import { Controller, useFormContext } from "react-hook-form";
 
-type TInputProps = {
-  type?: string;
+type TDatePickerProps = {
   name: string;
   label?: string;
   extra?: { labelCol?: { span: number }; wrapperCol?: { span: number } };
   disabled?: boolean;
 };
 
-const CustomInput = ({ type, name, label, extra, disabled }: TInputProps) => {
+const CustomDatePicker = ({
+  name,
+  label,
+  extra,
+  disabled,
+}: TDatePickerProps) => {
   return (
     <Controller
       name={name}
@@ -26,12 +30,13 @@ const CustomInput = ({ type, name, label, extra, disabled }: TInputProps) => {
           }}
           {...extra}
         >
-          <Input
+          <DatePicker
+            format={"YYYY-MM-DD"}
+            defaultValue={field.value}
             variant="filled"
-            type={type}
-            id={name}
             {...field}
             size="large"
+            style={{ width: "100%" }}
             disabled={disabled}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
@@ -41,4 +46,4 @@ const CustomInput = ({ type, name, label, extra, disabled }: TInputProps) => {
   );
 };
 
-export default CustomInput;
+export default CustomDatePicker;

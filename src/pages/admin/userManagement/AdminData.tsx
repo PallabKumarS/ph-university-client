@@ -1,4 +1,4 @@
-const CreateAdmin = () => {
+const AdminData = () => {
   return (
     <div>
       <h1> This is CreateAdmin component </h1>
@@ -6,4 +6,4 @@ const CreateAdmin = () => {
   );
 };
 
-export default CreateAdmin;
+export default AdminData;

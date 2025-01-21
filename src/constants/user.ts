@@ -1,10 +1,9 @@
 import { bloodGroupOptions, genderOptions } from "./global";
-import { semesterOptions } from "./semester";
 
 export type TField = {
   name: string;
   label: string;
-  type: "text" | "select" | "date";
+  type: "text" | "select" | "date" | "file";
   options?: { label: string; value: string }[];
 };
 
@@ -12,7 +11,6 @@ export const UserFormFields: TField[] = [
   { name: "name.firstName", label: "First Name", type: "text" },
   { name: "name.middleName", label: "Middle Name", type: "text" },
   { name: "name.lastName", label: "Last Name", type: "text" },
-  { name: "profileImage", label: "Profile Image", type: "text" },
   {
     name: "gender",
     label: "Gender",
@@ -35,36 +33,35 @@ export const UserFormFields: TField[] = [
   },
   { name: "presentAddress", label: "Present Address", type: "text" },
   { name: "permanentAddress", label: "Permanent Address", type: "text" },
-  { name: "designation", label: "Designation", type: "text" },
 ];
 
 export const academicFormFields: TField[] = [
   {
-    name: "admissionSemester",
+    name: "academicSemester",
     label: "Admission Semester",
     type: "select",
-    options: semesterOptions,
   },
   {
     name: "academicDepartment",
     label: "Academic Department",
     type: "select",
   },
+  { name: "designation", label: "Designation", type: "text" },
 ];
 
 export const localGuardianFormFields: TField[] = [
   {
-    name: "localGuardian.fatherName",
+    name: "localGuardian.name",
     label: "Local Guardian's Name",
     type: "text",
   },
   {
-    name: "localGuardian.fatherOccupation",
+    name: "localGuardian.occupation",
     label: "Local Guardian's Occupation",
     type: "text",
   },
   {
-    name: "localGuardian.fatherContactNo",
+    name: "localGuardian.contactNo",
     label: "Local Guardian's Contact Number",
     type: "text",
   },
