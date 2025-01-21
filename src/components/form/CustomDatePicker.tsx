@@ -1,5 +1,5 @@
 import { DatePicker, Form } from "antd";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 type TDatePickerProps = {
   name: string;
@@ -31,7 +31,7 @@ const CustomDatePicker = ({
           {...extra}
         >
           <DatePicker
-            format={"YYYY-MM-DD"}
+            // format={"YYYY-MM-DD"}
             defaultValue={field.value}
             variant="filled"
             {...field}

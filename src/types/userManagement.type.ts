@@ -48,6 +48,7 @@ export type TStudent = {
   __v: number;
   createdAt: string;
   updatedAt: string;
+  isBlocked: boolean;
 };
 
 export type TUser = {
@@ -60,3 +61,8 @@ export type TUser = {
   status: "in-progress" | "blocked";
   isDeleted: boolean;
 };
+
+export type TTableUserData = Pick<
+  TStudent,
+  "id" | "fullName" | "email" | "contactNo" | "isBlocked"
+> & { key: string };

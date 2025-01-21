@@ -45,15 +45,17 @@ const studentManagementApi = baseApi.injectEndpoints({
         url: `/students/${id}`,
         method: "GET",
       }),
-      providesTags: ["students"],
+      transformResponse: (response: TResponseRedux<TStudent>) => {
+        return response;
+      },
     }),
 
     // update semester api
     updateStudent: builder.mutation({
-      query: ({ id, studentData }) => ({
+      query: ({ id, updatedData }) => ({
         url: `/students/${id}`,
         method: "PATCH",
-        body: studentData,
+        body: updatedData,
       }),
       invalidatesTags: ["students"],
       transformResponse: (response: TResponseRedux<Partial<TSemester>>) => {
@@ -69,6 +71,16 @@ const studentManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["students"],
     }),
+
+    // change student status api
+    changeBlocked: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/students/change-status/${id}`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["students"],
+    }),
   }),
 });
 
@@ -78,4 +90,5 @@ export const {
   useGetAllStudentsQuery,
   useGetSingleStudentQuery,
   useUpdateStudentMutation,
+  useChangeBlockedMutation,
 } = studentManagementApi;

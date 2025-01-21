@@ -1,7 +1,10 @@
 import { Button, Pagination, Table, TableColumnsType, TableProps } from "antd";
 import { TMeta, TQueryParams } from "../../../types/global.type";
-import { TStudent, TUserType } from "../../../types/userManagement.type";
-import { TTableStudentData } from "./StudentData";
+import {
+  TStudent,
+  TTableUserData,
+  TUserType,
+} from "../../../types/userManagement.type";
 import { FaEdit } from "react-icons/fa";
 import { showDeleteConfirm } from "../../../components/ui/AlertBox";
 import { MdDeleteForever } from "react-icons/md";
@@ -12,13 +15,14 @@ type TTableProps = {
     data?: TStudent[];
     meta?: TMeta;
   };
-  handleEdit: (record: TTableStudentData) => void;
+  handleEdit: (record: TTableUserData) => void;
   handleDelete: (id: string) => void;
   isSFetching: boolean;
   setParams: React.Dispatch<React.SetStateAction<TQueryParams[]>>;
   userType: TUserType;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   page: number;
+  handleStatusChange: (id: string, isBlocked: boolean) => void;
 };
 
 const UserTable = ({
@@ -30,6 +34,7 @@ const UserTable = ({
   userType,
   setPage,
   page,
+  handleStatusChange,
 }: TTableProps) => {
   const navigate = useNavigate();
 
@@ -37,18 +42,19 @@ const UserTable = ({
   const metaData = data?.meta;
 
   const tableData = data?.data?.map((item) => ({
-    key: item._id,
-    name: item.fullName,
-    email: item.email,
-    contactNo: item.contactNo,
-    id: item.id,
+    key: item?._id,
+    fullName: item?.fullName,
+    email: item?.email,
+    contactNo: item?.contactNo,
+    id: item?.id,
+    isBlocked: item?.isBlocked,
   }));
 
-  const columns: TableColumnsType<TTableStudentData> = [
+  const columns: TableColumnsType<TTableUserData> = [
     // first column in table
     {
       title: "Name",
-      dataIndex: "name",
+      dataIndex: "fullName",
       showSorterTooltip: { target: "full-header" },
     },
 
@@ -115,11 +121,11 @@ const UserTable = ({
             <Button
               className=""
               onClick={() => {
-                console.log(record.key);
+                handleStatusChange(record.key, !record.isBlocked);
               }}
               danger
             >
-              Block
+              {record.isBlocked ? "Unblock" : "Block"}
             </Button>
           </div>
         );
@@ -128,7 +134,7 @@ const UserTable = ({
   ];
 
   // handle pagination
-  const onChange: TableProps<TTableStudentData>["onChange"] = (
+  const onChange: TableProps<TTableUserData>["onChange"] = (
     _pagination,
     filters,
     sorter,
@@ -147,7 +153,7 @@ const UserTable = ({
 
   return (
     <>
-      <Table<TTableStudentData>
+      <Table<TTableUserData>
         columns={columns}
         dataSource={tableData}
         onChange={onChange}

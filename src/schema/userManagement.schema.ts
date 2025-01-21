@@ -39,7 +39,7 @@ const localGuardianSchema = z.object({
 export const studentSchema = z.object({
   name: userNameSchema,
   gender: z.enum(["male", "female"]),
-  dateOfBirth: z.object({}).optional(),
+  dateOfBirth: z.any().optional(),
   email: z.string({ required_error: "Email is required" }).email(),
   contactNo: z.string({ required_error: "Contact no is required" }),
   emergencyContactNo: z.string().optional(),
@@ -54,12 +54,13 @@ export const studentSchema = z.object({
   academicDepartment: z.string({
     required_error: "Academic department is required",
   }),
+  profileImage: z.any(),
 });
 
 export const teacherSchema = z.object({
   name: userNameSchema,
   gender: z.enum(["male", "female"]),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z.string().datetime().optional(),
   email: z.string({ required_error: "Email is required" }).email(),
   contactNo: z.string({ required_error: "Contact no is required" }),
   emergencyContactNo: z.string(),
@@ -70,12 +71,13 @@ export const teacherSchema = z.object({
     required_error: "Academic department is required",
   }),
   designation: z.string({ required_error: "Designation is required" }),
+  profileImage: z.any(),
 });
 
 export const adminSchema = z.object({
   name: userNameSchema,
   gender: z.enum(["male", "female"]),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z.string().datetime().optional(),
   email: z.string({ required_error: "Email is required" }).email(),
   contactNo: z.string({ required_error: "Contact no is required" }),
   emergencyContactNo: z.string(),
@@ -86,4 +88,5 @@ export const adminSchema = z.object({
     required_error: "Academic department is required",
   }),
   designation: z.string({ required_error: "Designation is required" }),
+  profileImage: z.any(),
 });

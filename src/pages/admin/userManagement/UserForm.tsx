@@ -18,11 +18,11 @@ import {
   studentSchema,
   teacherSchema,
 } from "../../../schema/userManagement.schema";
-import { TUserType } from "../../../types/userManagement.type";
+import { TStudent, TUserType } from "../../../types/userManagement.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 type TUserFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
-  initialData?: FieldValues;
+  initialData?: TStudent;
   userType: TUserType;
   departmentOptions?: { label: string; value: string }[];
   semesterOptions?: { label: string; value: string }[];
@@ -114,11 +114,13 @@ const UserForm = ({
       }
     });
 
+  console.log(initialData);
+
   return (
     <CustomForm
+      defaultValues={initialData}
       onSubmit={onSubmit}
       resolver={zodResolver(schemaMap[userType])}
-      defaultValues={initialData}
     >
       <Row gutter={[16, 16]}>
         <Divider>{steps[step].title}</Divider>

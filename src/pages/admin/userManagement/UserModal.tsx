@@ -6,15 +6,18 @@ import {
   TSemester,
 } from "../../../types/academicManagement.types";
 import UserForm from "./UserForm";
-import { TUserType } from "../../../types/userManagement.type";
-import { useCreateStudentMutation } from "../../../redux/features/admin/userManagement/studentManagement.api";
+import { TTableUserData, TUserType } from "../../../types/userManagement.type";
+import {
+  useCreateStudentMutation,
+  useGetSingleStudentQuery,
+} from "../../../redux/features/admin/userManagement/studentManagement.api";
 import { toast } from "sonner";
 import { TResponse } from "../../../types/global.type";
 
 type TModalProps = {
   isModalOpen: boolean;
   onClose: () => void;
-  initialData?: FieldValues;
+  initialData?: TTableUserData;
   userType: TUserType;
   departmentData?: {
     data?: TDepartment[];
@@ -34,12 +37,17 @@ const UserModal = ({
 }: TModalProps) => {
   // api hooks
   const [createStudent] = useCreateStudentMutation();
+  const { data: studentData, isFetching: isSFetching } =
+    useGetSingleStudentQuery(initialData?.key, {
+      skip: userType === "student" && initialData ? false : true,
+    });
 
   // convert to options for select field
   const departmentOptions = departmentData?.data?.map((department) => ({
     label: department.name || "",
     value: department._id || "",
   }));
+
   const semesterOptions = semesterData?.data?.map((semester) => ({
     label: `${semester.name} ${semester.year}` || "",
     value: semester._id || "",
@@ -57,7 +65,6 @@ const UserModal = ({
       studentData: restData,
     };
 
-
     const studentData = JSON.stringify(userData);
     formData.append("data", studentData);
 
@@ -67,9 +74,6 @@ const UserModal = ({
 
     try {
       const res = (await createStudent(formData)) as TResponse<any>;
-
-      console.log(res);
-
       if (res.data?.success) {
         onClose();
         toast.success(res.data.message, { id: toastId });
@@ -111,6 +115,7 @@ const UserModal = ({
         departmentOptions={departmentOptions}
         onCancel={onClose}
         semesterOptions={semesterOptions}
+        initialData={isSFetching ? undefined : studentData?.data}
       ></UserForm>
     </Modal>
   );

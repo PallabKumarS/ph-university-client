@@ -2,6 +2,7 @@ import { Form, Upload } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
 import { useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
+import { File } from "lucide-react";
 
 type TDraggerProps = {
   name: string;
@@ -13,13 +14,13 @@ type TDraggerProps = {
 };
 
 const CustomDragger = ({ name, label, extra }: TDraggerProps) => {
-  const { setValue, resetField } = useFormContext();
   const [fileList, setFileList] = useState<any[]>([]);
+  const { setValue, resetField } = useFormContext();
 
   const handleBeforeUpload = (file: any) => {
     setFileList([file]);
     setValue(name, file);
-    return false; // Prevent automatic upload
+    return false;
   };
 
   const handleRemove = () => {
@@ -48,7 +49,11 @@ const CustomDragger = ({ name, label, extra }: TDraggerProps) => {
             beforeUpload={handleBeforeUpload}
           >
             <p className="ant-upload-drag-icon">
-              <InboxOutlined />
+              {fileList.length > 0 ? (
+                <File />
+              ) : (
+                <InboxOutlined style={{ fontSize: "2rem" }} />
+              )}
             </p>
             <p className="ant-upload-text">
               Click or drag file to this area to upload
