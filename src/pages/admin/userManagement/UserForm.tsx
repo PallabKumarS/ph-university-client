@@ -1,41 +1,51 @@
-import { Button, Col, Divider, Row } from "antd";
+import { Button, Divider, Row, Skeleton } from "antd";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import {
   academicFormFields,
   guardianFormFields,
   localGuardianFormFields,
-  TField,
   UserFormFields,
 } from "../../../constants/user";
-import CustomSelect from "../../../components/form/CustomSelect";
-import CustomInput from "../../../components/form/CustomInput";
-import CustomForm from "../../../components/form/CustomForm";
-import CustomDatePicker from "../../../components/form/CustomDatePicker";
-import CustomDragger from "../../../components/form/CustomDragger";
 import { useState } from "react";
 import {
   adminSchema,
   studentSchema,
   teacherSchema,
+  updateAdminSchema,
+  updateStudentSchema,
+  updateTeacherSchema,
 } from "../../../schema/userManagement.schema";
 import { TStudent, TUserType } from "../../../types/userManagement.type";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { renderFields } from "../../../utils/formFieldRenderer";
+import CustomForm from "../../../components/form/CustomForm";
+
+// type declared here
 type TUserFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
   initialData?: TStudent;
   userType: TUserType;
-  departmentOptions?: { label: string; value: string }[];
-  semesterOptions?: { label: string; value: string }[];
+  departmentOptions?: { label: string; value: string; disabled?: boolean }[];
+  semesterOptions?: { label: string; value: string; disabled?: boolean }[];
   onCancel: () => void;
+  edit: boolean;
 };
 
+// map userType to schema
 const schemaMap = {
   student: studentSchema,
   teacher: teacherSchema,
   admin: adminSchema,
 };
 
+const updateSchemaMap = {
+  student: updateStudentSchema,
+  teacher: updateTeacherSchema,
+  admin: updateAdminSchema,
+};
+
 const UserForm = ({
+  edit = false,
   onSubmit,
   initialData,
   userType,
@@ -52,9 +62,11 @@ const UserForm = ({
   const steps = [
     {
       title: "Personal Info",
-      fields: UserFormFields.concat([
-        { name: "profileImage", label: "Profile Image", type: "file" },
-      ]),
+      fields: initialData
+        ? UserFormFields
+        : UserFormFields.concat([
+            { name: "profileImage", label: "Profile Image", type: "file" },
+          ]),
     },
     {
       title: "Guardian Info",
@@ -68,63 +80,41 @@ const UserForm = ({
     },
   ];
 
-  // rendering logic for form fields
-  const renderFields = (fields: TField[]) =>
-    fields.map((field) => {
-      if (field.type === "select") {
-        return (
-          <Col span={24} lg={8} md={12} key={field.name}>
-            <CustomSelect
-              name={field.name}
-              label={field.label}
-              options={
-                field.options ||
-                (field.name === "academicDepartment"
-                  ? departmentOptions
-                  : semesterOptions)
-              }
-            />
-          </Col>
-        );
-      } else if (field.type === "text" || field.type === "file") {
-        return (
-          <Col
-            span={field.type === "file" ? 24 : 24}
-            lg={field.type === "file" ? 24 : 8}
-            md={field.type === "file" ? 24 : 12}
-            key={field.name}
-          >
-            {field.type === "file" ? (
-              <CustomDragger name={field.name} label={field.label} />
-            ) : (
-              <CustomInput
-                name={field.name}
-                label={field.label}
-                type={field.type}
-              />
-            )}{" "}
-          </Col>
-        );
-      } else {
-        return (
-          <Col span={24} lg={8} md={12} key={field.name}>
-            <CustomDatePicker name={field.name} label={field.label} />
-          </Col>
-        );
-      }
-    });
-
-  console.log(initialData);
+  if (edit) {
+    if (!initialData) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "1rem",
+          }}
+        >
+          <Skeleton active />
+          <Skeleton active />
+          <Skeleton active />
+        </div>
+      );
+    }
+  }
 
   return (
     <CustomForm
-      defaultValues={initialData}
+      defaultValues={{
+        ...initialData,
+        academicSemester: initialData?.academicSemester?._id,
+        academicDepartment: initialData?.academicDepartment?._id,
+      }}
       onSubmit={onSubmit}
-      resolver={zodResolver(schemaMap[userType])}
+      resolver={zodResolver(
+        initialData ? updateSchemaMap[userType] : schemaMap[userType]
+      )}
     >
       <Row gutter={[16, 16]}>
         <Divider>{steps[step].title}</Divider>
-        {renderFields(steps[step].fields)}
+        {renderFields(steps[step].fields, semesterOptions, departmentOptions)}
       </Row>
       <div className="responsive-button-group" style={{ marginTop: "1.5rem" }}>
         {step > 0 && <Button onClick={prevStep}>Previous</Button>}
@@ -132,10 +122,10 @@ const UserForm = ({
         {step === steps.length - 1 && (
           <Button type="primary" htmlType="submit">
             {initialData
-              ? `Edit ${userType.charAt(0).toUpperCase() + userType.slice(1)}`
+              ? "Submit Edit"
               : `Create ${
                   userType.charAt(0).toUpperCase() + userType.slice(1)
-                }`}{" "}
+                }`}
           </Button>
         )}
         <Button onClick={onCancel} danger>

@@ -5,14 +5,9 @@ import { Layout, Menu } from "antd";
 import { useAppSelector } from "../../redux/hook";
 import { TUser, selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { TSidebarRoute } from "../../types/sidebar.type";
+import { USER_ROLE } from "../../constants/user";
 
 const { Sider } = Layout;
-
-const userRole = {
-  ADMIN: "admin",
-  STUDENT: "student",
-  TEACHER: "teacher",
-};
 
 const Sidebar = () => {
   let sidebarRoutes: TSidebarRoute[] | undefined;
@@ -20,14 +15,14 @@ const Sidebar = () => {
   const user = useAppSelector(selectCurrentUser) as TUser | null;
 
   switch (user?.role || "student") {
-    case userRole.ADMIN:
-      sidebarRoutes = sidebarRoutesGenerator(adminPaths, userRole.ADMIN);
+    case USER_ROLE.admin:
+      sidebarRoutes = sidebarRoutesGenerator(adminPaths, USER_ROLE.admin);
       break;
-    case userRole.STUDENT:
-      sidebarRoutes = sidebarRoutesGenerator(studentPaths, userRole.STUDENT);
+    case USER_ROLE.student:
+      sidebarRoutes = sidebarRoutesGenerator(studentPaths, USER_ROLE.student);
       break;
-    case userRole.TEACHER:
-      sidebarRoutes = sidebarRoutesGenerator(studentPaths, userRole.TEACHER);
+    case USER_ROLE.teacher:
+      sidebarRoutes = sidebarRoutesGenerator(studentPaths, USER_ROLE.teacher);
       break;
     default:
       sidebarRoutes = [];

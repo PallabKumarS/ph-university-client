@@ -27,12 +27,19 @@ const CustomInput = ({ type, name, label, extra, disabled }: TInputProps) => {
           {...extra}
         >
           <Input
+            {...field}
             variant="filled"
             type={type}
             id={name}
             {...field}
             size="large"
             disabled={disabled}
+            placeholder={`Enter ${label}`}
+            onChange={(e) => {
+              field.onChange(
+                type === "number" ? Number(e.target.value) : e.target.value
+              );
+            }}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>

@@ -10,7 +10,7 @@ export const showDeleteConfirm = (
   onClick?: MouseEventHandler<HTMLElement> | undefined
 ) => {
   confirm({
-    title: message || "Do you want to delete these item ?",
+    title: <p>{message || "Do you want to delete these item ?"}</p>,
     icon: (
       <FaExclamationCircle
         style={{

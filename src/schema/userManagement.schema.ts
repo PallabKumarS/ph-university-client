@@ -39,7 +39,7 @@ const localGuardianSchema = z.object({
 export const studentSchema = z.object({
   name: userNameSchema,
   gender: z.enum(["male", "female"]),
-  dateOfBirth: z.any().optional(),
+  dateOfBirth: z.string().datetime().optional(),
   email: z.string({ required_error: "Email is required" }).email(),
   contactNo: z.string({ required_error: "Contact no is required" }),
   emergencyContactNo: z.string().optional(),
@@ -90,3 +90,19 @@ export const adminSchema = z.object({
   designation: z.string({ required_error: "Designation is required" }),
   profileImage: z.any(),
 });
+
+// export const updateStudentSchema = studentSchema.partial().refine(
+//   (data) => {
+//     return Object.entries(data).forEach((value) => value !== undefined);
+//   },
+//   {
+//     message:
+//       "Fields cannot be empty. Please provide valid data for all fields.",
+//   }
+// );
+
+export const updateStudentSchema = studentSchema.partial();
+
+export const updateTeacherSchema = teacherSchema.partial();
+
+export const updateAdminSchema = adminSchema.partial();

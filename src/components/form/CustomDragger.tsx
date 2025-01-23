@@ -42,6 +42,7 @@ const CustomDragger = ({ name, label, extra }: TDraggerProps) => {
           {...extra}
         >
           <Upload.Dragger
+            id={name}
             onRemove={handleRemove}
             {...field}
             name={name}

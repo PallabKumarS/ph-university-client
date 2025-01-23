@@ -2,6 +2,9 @@ import AcademicDepartment from "../pages/admin/academicManagement/academicDepart
 import AcademicFaculty from "../pages/admin/academicManagement/academicFaculty/AcademicFaculty";
 import AcademicSemester from "../pages/admin/academicManagement/academicSemester/AcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import Courses from "../pages/admin/courseManagement/Courses";
+import OfferedCourses from "../pages/admin/courseManagement/OfferedCourses";
+import SemesterRegistration from "../pages/admin/courseManagement/semesterRegistration/SemesterRegistration";
 import AdminData from "../pages/admin/userManagement/AdminData";
 import StudentData from "../pages/admin/userManagement/StudentData";
 import StudentDetails from "../pages/admin/userManagement/StudentDetails";
@@ -61,6 +64,30 @@ export const adminPaths: TUserPaths[] = [
         name: "Academic Department",
         path: "academic-department",
         element: <AcademicDepartment />,
+      },
+    ],
+  },
+
+  // course management
+  {
+    name: "Course Management",
+    children: [
+      {
+        name: "Courses",
+        path: "courses",
+        element: <Courses />,
+      },
+
+      {
+        name: "Offered Courses",
+        path: "offered-courses",
+        element: <OfferedCourses />,
+      },
+
+      {
+        name: "Semester Registration",
+        path: "semester-registration",
+        element: <SemesterRegistration />,
       },
     ],
   },

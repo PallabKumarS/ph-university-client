@@ -28,7 +28,6 @@ export type TStudent = {
   fullName: string;
   id: string;
   user: TUser;
-  password: string;
   name: TUserName;
   gender: "male" | "female" | "other";
   dateOfBirth?: Date;
@@ -66,3 +65,26 @@ export type TTableUserData = Pick<
   TStudent,
   "id" | "fullName" | "email" | "contactNo" | "isBlocked"
 > & { key: string };
+
+export type TUserRole = "student" | "teacher" | "admin";
+
+export type TTeacher = Omit<
+  TStudent,
+  "academicSemester" | "isBlocked" | "guardian" | "localGuardian"
+> & {
+  designation: string;
+};
+
+export type TAdmin = Omit<TTeacher, "academicDepartment">;
+
+export type TTransformedStudent = Omit<
+  TStudent,
+  "academicSemester" | "academicDepartment"
+> & {
+  academicSemester: string;
+  academicDepartment: string;
+};
+
+export type TTransformedTeacher = Omit<TTeacher, "academicDepartment"> & {
+  academicDepartment: string;
+};

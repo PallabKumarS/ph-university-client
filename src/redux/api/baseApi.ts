@@ -46,16 +46,13 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     });
   }
 
-  if (
-    result?.error &&
-    // instanceof InvalidTokenError &&
-    result?.error?.status === 401
-  ) {
+  if (result?.error?.status === 401) {
     // send refresh token
     const res = await fetch("http://localhost:5000/api/v1/auth/refresh-token", {
       method: "POST",
       credentials: "include",
     });
+
     const refreshTokenResult = await res.json();
 
     // checking if the refresh token expired or not
@@ -72,10 +69,10 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 
       // retry original query with new access token
       result = await baseQuery(args, api, extraOptions);
+    } else {
+      // if refresh token is expired
+      api.dispatch(logout());
     }
-
-    // if refresh token is expired
-    api.dispatch(logout());
   }
 
   return result;
@@ -93,6 +90,9 @@ export const baseApi = createApi({
     "students",
     "admins",
     "teachers",
+    "courses",
+    "semesterRegistrations",
+    "offeredCourses",
   ],
 });
 

@@ -20,6 +20,8 @@ const StudentData = () => {
   const [params, setParams] = useState<TQueryParams[]>([]);
   const [editData, setEditData] = useState<TTableUserData | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [limit, setLimit] = useState<number>(4);
 
   // api related hooks
   const { data: departmentData, isFetching: isDFetching } =
@@ -28,7 +30,7 @@ const StudentData = () => {
     });
 
   const { data: studentData, isFetching: isSFetching } = useGetAllStudentsQuery(
-    [...params, { name: "limit", value: 4 }, { name: "page", value: page }],
+    [...params, { name: "limit", value: limit }, { name: "page", value: page }],
     {
       refetchOnReconnect: true,
     }
@@ -46,6 +48,7 @@ const StudentData = () => {
   // handle edit
   const handleEdit = (record: TTableUserData) => {
     setEditData(record);
+    setIsEdit(true);
     setEditModalOpen(true);
   };
 
@@ -111,12 +114,12 @@ const StudentData = () => {
             setIsModalOpen(false);
           }}
           userType="student"
+          dependency={{ isDFetching, isSemFetching }}
         />
       )}
 
       {/* table here  */}
       <UserTable
-        page={page}
         setPage={setPage}
         userType="student"
         data={studentData}
@@ -130,6 +133,7 @@ const StudentData = () => {
       {/* edit modal here  */}
       {editModalOpen && (
         <UserModal
+          isEdit={isEdit}
           isModalOpen={editModalOpen}
           departmentData={departmentData}
           semesterData={semesterData}
@@ -138,6 +142,7 @@ const StudentData = () => {
           }}
           initialData={editData || undefined}
           userType="student"
+          dependency={{ isDFetching, isSemFetching }}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-const OfferCourse = () => {
+const OfferedCourses = () => {
   return (
     <div>
       <h1>This is OfferCourse Component</h1>
@@ -6,4 +6,4 @@ const OfferCourse = () => {
   );
 };
 
-export default OfferCourse;
+export default OfferedCourses;

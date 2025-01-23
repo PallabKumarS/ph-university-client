@@ -15,7 +15,7 @@ const studentManagementApi = baseApi.injectEndpoints({
       invalidatesTags: ["students"],
     }),
 
-    // get all semester api
+    // get all student api
     getAllStudents: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -39,7 +39,7 @@ const studentManagementApi = baseApi.injectEndpoints({
       },
     }),
 
-    // get single semester api
+    // get single student api
     getSingleStudent: builder.query({
       query: (id) => ({
         url: `/students/${id}`,
@@ -50,7 +50,7 @@ const studentManagementApi = baseApi.injectEndpoints({
       },
     }),
 
-    // update semester api
+    // update student api
     updateStudent: builder.mutation({
       query: ({ id, updatedData }) => ({
         url: `/students/${id}`,
@@ -63,7 +63,7 @@ const studentManagementApi = baseApi.injectEndpoints({
       },
     }),
 
-    // delete semester api
+    // delete student api
     deleteStudent: builder.mutation({
       query: (id) => ({
         url: `/students/${id}`,

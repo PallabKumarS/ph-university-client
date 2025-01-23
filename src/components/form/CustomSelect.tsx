@@ -26,12 +26,14 @@ const CustomSelect = ({
           {...extra}
         >
           <Select
+            id={name}
             variant="filled"
             style={{ width: "100%" }}
             {...field}
             options={options}
             size="large"
             disabled={disabled}
+            placeholder={`Select ${label}`}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>

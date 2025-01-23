@@ -1,8 +1,10 @@
 import { Button, Pagination, Table, TableColumnsType, TableProps } from "antd";
 import { TMeta, TQueryParams } from "../../../types/global.type";
 import {
+  TAdmin,
   TStudent,
   TTableUserData,
+  TTeacher,
   TUserType,
 } from "../../../types/userManagement.type";
 import { FaEdit } from "react-icons/fa";
@@ -12,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 type TTableProps = {
   data?: {
-    data?: TStudent[];
+    data?: TStudent[] | TTeacher[] | TAdmin[];
     meta?: TMeta;
   };
   handleEdit: (record: TTableUserData) => void;
@@ -21,7 +23,6 @@ type TTableProps = {
   setParams: React.Dispatch<React.SetStateAction<TQueryParams[]>>;
   userType: TUserType;
   setPage: React.Dispatch<React.SetStateAction<number>>;
-  page: number;
   handleStatusChange: (id: string, isBlocked: boolean) => void;
 };
 
@@ -33,7 +34,6 @@ const UserTable = ({
   setParams,
   userType,
   setPage,
-  page,
   handleStatusChange,
 }: TTableProps) => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const UserTable = ({
     email: item?.email,
     contactNo: item?.contactNo,
     id: item?.id,
-    isBlocked: item?.isBlocked,
+    isBlocked: "isBlocked" in item ? item.isBlocked ?? false : false,
   }));
 
   const columns: TableColumnsType<TTableUserData> = [
@@ -81,7 +81,7 @@ const UserTable = ({
     {
       align: "center",
       title: "Action",
-      render: (record) => {
+      render: (record: TTableUserData) => {
         return (
           <div className="responsive-button-group">
             {/* details button here  */}
@@ -108,8 +108,8 @@ const UserTable = ({
               className=""
               onClick={() =>
                 showDeleteConfirm(
-                  "Are you sure you want to delete this semester ?",
-                  `${record.name}  ${record.year} semester will be deleted`,
+                  `Are you sure you want to delete this ${userType}?`,
+                  `Name: ${record.fullName}, Id: ${record.id} will be deleted`,
                   () => handleDelete(record.key)
                 )
               }
@@ -118,15 +118,18 @@ const UserTable = ({
               <MdDeleteForever />
             </Button>
 
-            <Button
-              className=""
-              onClick={() => {
-                handleStatusChange(record.key, !record.isBlocked);
-              }}
-              danger
-            >
-              {record.isBlocked ? "Unblock" : "Block"}
-            </Button>
+            {/* block button  */}
+            {userType === "student" && (
+              <Button
+                className=""
+                onClick={() => {
+                  handleStatusChange(record.key, !record.isBlocked);
+                }}
+                danger
+              >
+                {record.isBlocked ? "Unblock" : "Block"}
+              </Button>
+            )}
           </div>
         );
       },
@@ -136,9 +139,9 @@ const UserTable = ({
   // handle pagination
   const onChange: TableProps<TTableUserData>["onChange"] = (
     _pagination,
-    filters,
+    _filters,
     sorter,
-    extra
+    _extra
   ) => {
     // query params here
     const queryParams: TQueryParams[] = [];
@@ -164,7 +167,7 @@ const UserTable = ({
       />
 
       <Pagination
-        current={page}
+        current={metaData?.page}
         onChange={(value) => setPage(value)}
         pageSize={metaData?.limit}
         total={metaData?.total}
