@@ -43,7 +43,7 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
     // get single SemesterRegistration api
     getSingleSemesterRegistration: builder.query({
       query: (id) => ({
-        url: `//semester-registrations/${id}`,
+        url: `/semester-registrations/${id}`,
         method: "GET",
       }),
       transformResponse: (response: TResponseRedux<TSemesterRegistration>) => {
@@ -54,7 +54,7 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
     // update SemesterRegistration api
     updateSemesterRegistration: builder.mutation({
       query: ({ id, updatedData }) => ({
-        url: `//semester-registrations/${id}`,
+        url: `/semester-registrations/${id}`,
         method: "PATCH",
         body: updatedData,
       }),
@@ -67,7 +67,7 @@ const semesterRegistrationApi = baseApi.injectEndpoints({
     // delete SemesterRegistration api
     deleteSemesterRegistration: builder.mutation({
       query: (id) => ({
-        url: `//semester-registrations/${id}`,
+        url: `/semester-registrations/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["semesterRegistrations"],

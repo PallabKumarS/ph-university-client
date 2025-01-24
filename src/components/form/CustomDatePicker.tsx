@@ -1,6 +1,7 @@
 import { DatePicker, Form } from "antd";
 import dayjs from "dayjs";
-import { Controller } from "react-hook-form";
+import { useEffect } from "react";
+import { Controller, useFormContext } from "react-hook-form";
 
 type TDatePickerProps = {
   name: string;
@@ -15,6 +16,14 @@ const CustomDatePicker = ({
   extra,
   disabled,
 }: TDatePickerProps) => {
+  const { setValue, watch } = useFormContext();
+
+  const formattedValue = watch(name) ? dayjs(watch(name)).toISOString() : null;
+
+  if (watch(name) && watch(name) !== formattedValue) {
+    setValue(name, formattedValue);
+  }
+
   return (
     <Controller
       name={name}
@@ -37,13 +46,13 @@ const CustomDatePicker = ({
             format={"YYYY-MM-DD"}
             value={field.value ? dayjs(field.value) : undefined}
             onChange={(date) =>
-              field.onChange(date ? date.toISOString() : null)
+              field.onChange(date ? date.toISOString() : field.value)
             }
             variant="filled"
             size="large"
             style={{ width: "100%" }}
             disabled={disabled}
-            placeholder="Select Date"
+            placeholder={label}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>

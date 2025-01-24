@@ -4,6 +4,7 @@ import { TQueryParams, TResponse } from "../../../../types/global.type";
 import {
   useDeleteSemesterRegistrationMutation,
   useGetAllSemesterRegistrationsQuery,
+  useUpdateSemesterRegistrationMutation,
 } from "../../../../redux/features/admin/courseManagement/semesterRegistration.api";
 import { toast } from "sonner";
 import "./../../../../index.css";
@@ -37,7 +38,7 @@ const SemesterRegistration = () => {
       refetchOnReconnect: true,
     });
   const [deleteSemesterRegistration] = useDeleteSemesterRegistrationMutation();
-
+  const [updateSemesterRegistration] = useUpdateSemesterRegistrationMutation();
 
   // handle delete function for delete button
   const handleDelete = async (id: string) => {
@@ -59,6 +60,27 @@ const SemesterRegistration = () => {
   const handleEdit = (record: TTableSemesterRegistrationData) => {
     setEditRecord(record);
     setIsEditModalOpen(true);
+  };
+
+  const handleStatusChange = async (id: string, status: string) => {
+    const toastId = toast.loading("Updating Semester Registration Status...");
+
+    try {
+      const res = (await updateSemesterRegistration({
+        id,
+        updatedData: { status },
+      })) as TResponse<any>;
+
+      if (res?.data?.success) {
+        toast.success(res?.data?.message, { id: toastId });
+      } else {
+        toast.error(res?.error?.data?.message || "An error occurred", {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      toast.error("An error occurred", { id: toastId });
+    }
   };
 
   return (
@@ -91,6 +113,7 @@ const SemesterRegistration = () => {
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         setParams={setParams}
+        handleStatusChange={handleStatusChange}
       />
       {/* edit modal here */}
       {isEditModalOpen && editRecord && (

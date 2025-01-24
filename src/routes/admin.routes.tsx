@@ -2,7 +2,7 @@ import AcademicDepartment from "../pages/admin/academicManagement/academicDepart
 import AcademicFaculty from "../pages/admin/academicManagement/academicFaculty/AcademicFaculty";
 import AcademicSemester from "../pages/admin/academicManagement/academicSemester/AcademicSemester";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import Courses from "../pages/admin/courseManagement/Courses";
+import Courses from "../pages/admin/courseManagement/courses/Courses";
 import OfferedCourses from "../pages/admin/courseManagement/OfferedCourses";
 import SemesterRegistration from "../pages/admin/courseManagement/semesterRegistration/SemesterRegistration";
 import AdminData from "../pages/admin/userManagement/AdminData";

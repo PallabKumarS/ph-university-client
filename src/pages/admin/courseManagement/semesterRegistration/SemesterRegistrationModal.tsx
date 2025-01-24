@@ -47,8 +47,6 @@ const SemesterRegistrationModal = ({
 
   // submit function
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log(data);
-
     const toastId = toast.loading(
       initialData
         ? "Updating Semester Registration..."
@@ -61,6 +59,8 @@ const SemesterRegistrationModal = ({
           id: initialData?.key,
           updatedData: data,
         })) as TResponse<any>;
+
+        console.log(res);
 
         res?.data?.success
           ? (onClose(), toast.success(res?.data?.message, { id: toastId }))

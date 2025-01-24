@@ -1,7 +1,15 @@
-import { Button, Table, TableColumnsType, TableProps } from "antd";
+import {
+  Button,
+  Dropdown,
+  MenuProps,
+  Table,
+  TableColumnsType,
+  TableProps,
+  Tag,
+} from "antd";
 import { FaEdit } from "react-icons/fa";
 import { showDeleteConfirm } from "../../../../components/ui/AlertBox";
-import { MdDeleteForever } from "react-icons/md";
+import { MdArrowDropDownCircle, MdDeleteForever } from "react-icons/md";
 import { TMeta, TQueryParams } from "../../../../types/global.type";
 import { Dispatch, SetStateAction } from "react";
 import { TTableSemesterRegistrationData } from "./SemesterRegistration";
@@ -16,6 +24,7 @@ type TTableProps = {
   handleEdit: (record: TTableSemesterRegistrationData) => void;
   handleDelete: (id: string) => void;
   isFetching: boolean;
+  handleStatusChange: (id: string, status: string) => void;
 };
 
 const SemesterRegistrationTable = ({
@@ -24,6 +33,7 @@ const SemesterRegistrationTable = ({
   handleEdit,
   handleDelete,
   isFetching,
+  handleStatusChange,
 }: TTableProps) => {
   // table data
   const tableData = data?.data?.map((item) => ({
@@ -37,29 +47,78 @@ const SemesterRegistrationTable = ({
     status: item.status,
   }));
 
+  // Menu items for the dropdown
+  const statusMenuItems: MenuProps["items"] = [
+    { label: "Upcoming", key: "UPCOMING" },
+    { label: "Ongoing", key: "ONGOING" },
+    { label: "Ended", key: "ENDED" },
+  ];
+
   const columns: TableColumnsType<TTableSemesterRegistrationData> = [
     // first column in table
     {
       title: "Name",
       dataIndex: "name",
+      align: "center",
     },
 
     // second column in table
     {
       title: "Start Date",
       dataIndex: "startDate",
+      align: "center",
     },
 
     // third column in table
     {
       title: "End Date",
       dataIndex: "endDate",
+      align: "center",
     },
 
     // fourth column in table
     {
       title: "Status",
       dataIndex: "status",
+      align: "center",
+      // render function for status column
+      render: (status: string, record: TTableSemesterRegistrationData) => {
+        let color = "green";
+        if (status === "UPCOMING") color = "green";
+        if (status === "ONGOING") color = "blue";
+        if (status === "ENDED") color = "red";
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <Tag color={color}>{status}</Tag>
+            <Dropdown
+              menu={{
+                items: statusMenuItems,
+                onClick: ({ key }) => {
+                  handleStatusChange(
+                    record.key,
+                    key as "UPCOMING" | "ONGOING" | "ENDED"
+                  );
+                },
+              }}
+              trigger={["click"]}
+            >
+              <Button type="link" size="small">
+                <MdArrowDropDownCircle
+                  style={{ fontSize: "1.5rem", color: color }}
+                />
+              </Button>
+            </Dropdown>
+          </div>
+        );
+      },
     },
 
     // fifth column in table (action column)

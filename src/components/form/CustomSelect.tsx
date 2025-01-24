@@ -7,6 +7,7 @@ type TSelectProps = {
   options: { label: string; value: string; disabled?: boolean }[];
   extra?: { labelCol?: { span: number }; wrapperCol?: { span: number } };
   disabled?: boolean;
+  mode?: string;
 };
 
 const CustomSelect = ({
@@ -15,6 +16,7 @@ const CustomSelect = ({
   options,
   extra,
   disabled,
+  mode,
 }: TSelectProps) => {
   return (
     <Controller
@@ -26,14 +28,15 @@ const CustomSelect = ({
           {...extra}
         >
           <Select
+            {...field}
+            mode={mode ? "multiple" : undefined}
             id={name}
             variant="filled"
             style={{ width: "100%" }}
-            {...field}
             options={options}
             size="large"
             disabled={disabled}
-            placeholder={`Select ${label}`}
+            placeholder={label}
           />
           {error && <small style={{ color: "red" }}>{error.message}</small>}
         </Form.Item>
